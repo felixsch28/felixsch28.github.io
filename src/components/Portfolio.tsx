@@ -1,79 +1,25 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { ExternalLink, Code, Camera } from 'lucide-react';
-import webProject from '@/assets/web-project.jpg';
-import photoProject from '@/assets/photo-project.jpg';
+import { projects, getProjectsByCategory } from '@/data/projects';
 
 const Portfolio = () => {
-  const [activeFilter, setActiveFilter] = useState('all');
+  const [activeFilter, setActiveFilter] = useState<'all' | 'web' | 'photo'>('all');
+  const navigate = useNavigate();
 
-  const projects = [
-    {
-      id: 1,
-      title: 'E-Commerce Platform',
-      category: 'web',
-      image: webProject,
-      description: 'Moderne E-Commerce-Lösung mit React und Stripe-Integration',
-      tags: ['React', 'TypeScript', 'Stripe'],
-      link: '#',
-    },
-    {
-      id: 2,
-      title: 'Hochzeitsfotografie',
-      category: 'photo',
-      image: photoProject,
-      description: 'Emotionale Hochzeitsreportage in natürlichem Stil',
-      tags: ['Portrait', 'Event', 'Natur'],
-      link: '#',
-    },
-    {
-      id: 3,
-      title: 'Corporate Website',
-      category: 'web',
-      image: webProject,
-      description: 'Professionelle Unternehmenswebsite mit CMS',
-      tags: ['Next.js', 'Sanity', 'SEO'],
-      link: '#',
-    },
-    {
-      id: 4,
-      title: 'Business Portraits',
-      category: 'photo',
-      image: photoProject,
-      description: 'Professionelle Businessporträts für LinkedIn',
-      tags: ['Business', 'Portrait', 'Studio'],
-      link: '#',
-    },
-    {
-      id: 5,
-      title: 'SaaS Dashboard',
-      category: 'web',
-      image: webProject,
-      description: 'Intuitive Dashboard-Lösung mit Datenvisualisierung',
-      tags: ['React', 'D3.js', 'API'],
-      link: '#',
-    },
-    {
-      id: 6,
-      title: 'Produktfotografie',
-      category: 'photo',
-      image: photoProject,
-      description: 'Hochwertige Produktfotos für Online-Shop',
-      tags: ['Produkt', 'Studio', 'E-Commerce'],
-      link: '#',
-    },
-  ];
+  const handleProjectClick = (projectId: string) => {
+    navigate(`/project/${projectId}`);
+  };
 
-  const filters = [
+  const filters: Array<{ id: 'all' | 'web' | 'photo'; label: string; icon: any }> = [
     { id: 'all', label: 'Alle Projekte', icon: null },
     { id: 'web', label: 'Web Design', icon: Code },
     { id: 'photo', label: 'Fotografie', icon: Camera },
   ];
 
-  const filteredProjects = activeFilter === 'all' 
-    ? projects 
-    : projects.filter(project => project.category === activeFilter);
+  const filteredProjects = getProjectsByCategory(activeFilter);
 
   return (
     <section id="portfolio" className="py-24 bg-accent/30">
@@ -125,22 +71,24 @@ const Portfolio = () => {
                     size="sm"
                     variant="secondary"
                     className="shadow-soft"
+                    onClick={() => handleProjectClick(project.id)}
                   >
                     <ExternalLink className="w-4 h-4 mr-2" />
-                    Ansehen
+                    Details ansehen
                   </Button>
                 </div>
               </div>
               
               <CardContent className="p-6">
-                <h3 className="text-xl font-semibold text-foreground mb-2">
+                <h3 className="text-xl font-semibold text-foreground mb-2 cursor-pointer hover:text-primary transition-colors"
+                    onClick={() => handleProjectClick(project.id)}>
                   {project.title}
                 </h3>
                 <p className="text-muted-foreground mb-4 leading-relaxed">
                   {project.description}
                 </p>
                 
-                <div className="flex flex-wrap gap-2">
+                <div className="flex flex-wrap gap-2 mb-4">
                   {project.tags.map((tag, tagIndex) => (
                     <span
                       key={tagIndex}
@@ -150,6 +98,16 @@ const Portfolio = () => {
                     </span>
                   ))}
                 </div>
+                
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => handleProjectClick(project.id)}
+                  className="hover:bg-accent"
+                >
+                  <ExternalLink className="w-4 h-4 mr-2" />
+                  Details ansehen
+                </Button>
               </CardContent>
             </Card>
           ))}
