@@ -1,9 +1,32 @@
 import { Button } from '@/components/ui/button';
 import { ArrowUp } from 'lucide-react';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 const Footer = () => {
+  const location = useLocation();
+  const navigate = useNavigate();
+
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const handleNavigation = (sectionId: string) => {
+    // If we're on the home page, just scroll to section
+    if (location.pathname === '/') {
+      const element = document.getElementById(sectionId);
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth' });
+      }
+    } else {
+      // If we're on another page, navigate to home and then scroll
+      navigate('/');
+      setTimeout(() => {
+        const element = document.getElementById(sectionId);
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth' });
+        }
+      }, 100);
+    }
   };
 
   const currentYear = new Date().getFullYear();
@@ -13,9 +36,12 @@ const Footer = () => {
       <div className="container mx-auto px-6">
         <div className="flex flex-col items-center text-center">
           {/* Logo */}
-          <div className="text-2xl font-bold text-primary mb-4">
+          <button 
+            onClick={() => navigate('/')}
+            className="text-2xl font-bold text-primary mb-4 hover:text-primary-hover transition-colors duration-200"
+          >
             Portfolio
-          </div>
+          </button>
           
           {/* Description */}
           <p className="text-background/80 mb-8 max-w-md">
@@ -33,12 +59,7 @@ const Footer = () => {
             ].map((link) => (
               <button
                 key={link.id}
-                onClick={() => {
-                  const element = document.getElementById(link.id);
-                  if (element) {
-                    element.scrollIntoView({ behavior: 'smooth' });
-                  }
-                }}
+                onClick={() => handleNavigation(link.id)}
                 className="text-background/80 hover:text-primary transition-colors duration-200"
               >
                 {link.label}
