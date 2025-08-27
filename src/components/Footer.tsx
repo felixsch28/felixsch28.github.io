@@ -72,7 +72,7 @@ const Footer = () => {
             onClick={scrollToTop}
             variant="outline"
             size="sm"
-            className="border-background/20 text-background hover:bg-background hover:text-foreground mb-8"
+            className="border-background/20 bg-tertiary text-background hover:bg-background hover:text-foreground mb-8"
           >
             <ArrowUp className="w-4 h-4 mr-2" />
             Nach oben
@@ -81,7 +81,7 @@ const Footer = () => {
           {/* Copyright */}
           <div className="border-t border-background/20 pt-8 w-full">
             <p className="text-background/60 text-sm">
-              © {currentYear} Portfolio. Alle Rechte vorbehalten.
+              © {currentYear} Felix Schütze. Alle Rechte vorbehalten.
             </p>
           </div>
         </div>
